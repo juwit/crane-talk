@@ -1,0 +1,390 @@
+@font-face {
+    font-family: Pirulen;
+    src: url("fonts/pirulen_rg.otf") format("opentype");
+}
+
+@font-face {
+    font-family: OldMaquineCaps;
+    src: url("fonts/OldMaquineCaps.otf") format("opentype");
+}
+
+@font-face {
+    font-family: OpenSans;
+    src: url("fonts/OpenSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Poppins;
+    src: url("fonts/Poppins-Regular.ttf") format("truetype");
+}
+
+:root {
+    /* Devoxx 2025 colors */
+    --color-bg-main: #3B3838;
+    --color-bg-alternate: #151515;
+    --color-bg-highlight: #78E23A;
+    --color-bg-black: #000000;
+
+    --color-main-schema: #78E23A;
+    --color-main-white: #f5f5f5;
+    --color-alternate1: #8FAADC;
+    --color-alternate2: #F4B183;
+    --color-alternate3: #FFD966;
+    /* /Devoxx 2025 colors */
+
+    --sd-heading1-size: 5vw;
+    --sd-heading1-line-height: 1;
+    --sd-heading2-size: 5vw;
+    --sd-heading2-line-height: 0.5;
+    --sd-text-size: 2.2vw;
+    --sd-text-line-height: 1.2;
+
+    --sd-background-color: var(--color-bg-black);
+    /* change with your devoxx theme color */
+    --sd-primary-color: var(--color-main-schema);
+    --sd-heading-color: var(--sd-primary-color);
+    --sd-text-color: #ffffff;
+
+
+    --r-background-color: var(--color-bg-main);
+    --r-main-color: #fff;
+
+    --r-main-font: Poppins, sans-serif;
+    --r-block-margin: 20px;
+    --r-heading-margin: 0 0 20px 0;
+
+    --r-heading-font: OldMaquineCaps, sans-serif;
+
+    --r-heading-color: var(--color-main-schema);
+    --r-heading-line-height: 1.2;
+
+    --r-heading-letter-spacing: normal;
+    --r-heading-text-transform: uppercase;
+    --r-heading-text-shadow: none;
+    --r-heading-font-weight: normal;
+
+    --r-heading1-size: 10vh;
+    --r-heading1-font-weight: 400;
+
+    --r-heading2-size: 8vh;
+    --r-heading3-size: 1.55em;
+    --r-heading4-size: 1em;
+
+    --r-main-font-size: 2.2vw;
+
+    --r-code-font: monospace;
+    --r-link-color: var(--color-main-schema);
+    --r-link-color-dark: var(--color-main-schema);
+    --r-link-color-hover: var(--color-main-schema);
+    --r-selection-background-color: var(--color-alternate1);
+    --r-selection-color: #fff;
+    --r-overlay-element-bg-color: 0, 0, 0;
+    --r-overlay-element-fg-color: 240, 240, 240;
+}
+
+.slides > section {
+    height : 100%;
+}
+
+.slides {
+    border-bottom: solid 30px var(--color-main-schema);
+    box-sizing: border-box;
+}
+
+.reveal .controls {
+    bottom: 40px;
+}
+
+i,
+.i {
+    font-family: "Open Sans Italic";
+}
+
+h1,
+h2 {
+    font-family: OldMaquineCaps;
+}
+
+.reveal .slides > section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    width: auto;
+    align-items: center;
+    justify-content: center;
+    /*background-color: var(--color-bg-alternate);*/
+}
+
+/* bottom bar */
+.sd-slide::after {
+    content: "";
+    height: 20px;
+    width: 100%;
+    position: absolute;
+    background-color: var(--sd-primary-color);
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+}
+
+/* stamp Devoxx 2024 */
+.stamp {
+    position: absolute;
+    background-color: var(--color-bg-alternate);
+    color: white;
+    top: 0;
+    right: 0;
+    font-family: Pirulen;
+    font-size: 1vw;
+    padding: 10px 20px;
+    z-index: 100;
+}
+
+.stamp span {
+    color: var(--color-bg-highlight);
+}
+
+/* main slide */
+
+.main-slide {
+    background-image: url(images/devoxx2025_avatar_orange.jpg);
+    background-position: top left;
+    background-position-x: -25vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-left: 50%;
+}
+
+.main-slide h1 {
+    font-size: 125px;
+}
+
+.main-slide::before {
+    content: "";
+    background-color: var(--color-bg-main);
+    top: -60%;
+    left: 55%;
+    width: 100%;
+    height: 200%;
+    position: absolute;
+    z-index: -1;
+    box-shadow: 0 0 10px var(--color-bg-main);
+    transform: rotate(-10deg);
+    background-image: url(images/slide-bg-25.png);
+    background-repeat: no-repeat;
+    background-position: left;
+
+}
+
+/* / main slide */
+
+/* decorative left band */
+.title-slide > .left-band,
+.left-band{
+    position: absolute;
+    left: -10%;
+    width: 500px;
+    height: 200%;
+    background-image: url(images/feuilles_devoxx.jpg);
+    background-repeat: no-repeat;
+    background-position: left;
+    transform: rotate(-10deg);
+}
+.left-band::after {
+    content: "";
+    width: 100%;
+    height: 200%;
+    position: absolute;
+    top: -47%;
+    left: 100%;
+    z-index: 1;
+    background-image: url(images/slide-bg-25.png);
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+/* title slide */
+
+.title-slide .subtitle {
+    font-family: OldMaquineCaps;
+    font-size: xxx-large;
+}
+
+.title-slide {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+.title-slide > div {
+    height: 100%;
+}
+
+.title-slide .left-text::before {
+    content: "";
+    background-color: var(--sd-primary-color);
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 200px;
+    height: 200%;
+    transform: rotate(-8deg);
+}
+
+.title-slide .left-text p {
+    font-family: OldMaquineCaps;
+    transform: rotate(-90deg);
+    position: absolute;
+    margin: 0;
+    left: -100px;
+    bottom: 170px;
+    font-size: xx-large;
+    color: var(--color-bg-black);
+}
+
+.left-text.intro {
+    left: -100px;
+    bottom: -100px;
+}
+
+.title-slide .title {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    flex-shrink: 1;
+
+}
+
+.title-slide .title .subtitle {
+    margin: 0;
+    text-align: right;
+}
+
+.title-slide .content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: end;
+    padding-bottom: 3vw;
+    padding-right: 130px;
+    flex-shrink: 0;
+}
+
+.title-slide .content p {
+    text-align: left;
+    margin: 1vw 0;
+}
+
+/* / title slide */
+
+/* no title slide */
+
+.no-title-slide {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+.no-title-slide > div {
+    height: 100%;
+}
+
+/*.no-title-slide .left-text {*/
+/*    position: relative;*/
+/*}*/
+
+.no-title-slide .left-text::before {
+    content: "";
+    background-color: var(--sd-primary-color);
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 200px;
+    height: 200%;
+    transform: rotate(-8deg);
+}
+
+.no-title-slide .left-text p {
+    font-family: OldMaquineCaps;
+    transform: rotate(-90deg);
+    position: absolute;
+    margin: 0;
+    left: -30px;
+    bottom: 130px;
+    font-size: xx-large;
+    color: var(--color-bg-black);
+}
+
+.no-title-slide .left-text.intro p {
+    left: -98px;
+    bottom: 166px;
+}
+
+.no-title-slide .left-text.vm p {
+    left: -91px;
+    bottom: 151px;
+}
+
+.no-title-slide .left-text.conclusion p {
+    left: -91px;
+    bottom: 151px;
+}
+
+.no-title-slide .content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: start;
+    padding: 30px 30px 30px 250px;
+}
+
+.no-title-slide .content p {
+    margin: 0;
+    text-align: left;
+}
+
+/* / no title slide */
+
+.content b {
+    color: var(--sd-primary-color);
+}
+
+/*
+ full size schema
+ */
+.content.schema-full {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.name {
+    color: var(--color-bg-highlight);
+    font-family: OldMaquineCaps;
+    display: flex;
+    align-items: center;
+}
+
+.pp {
+    border-radius: 50%;
+    border: solid 6px var(--color-bg-highlight);
+    width: 10vw;
+    align-self: end;
+}
+
+/**
+ * demo slide shows commands, so its flex vertical
+ */
+.reveal .slides > section.demo-slide {
+    flex-direction: column;
+    gap: 3vw;
+    flex-grow: 0;
+    align-items: center;
+}

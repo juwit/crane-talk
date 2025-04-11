@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DEVOXX FRANCE 2025 - Rebase d'images Docker / OCI avec crane</title>
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/white.css">
+    <link rel="stylesheet" href="css/devoxx.css">
+
+    <link rel="icon" type="image/png" href="assets/devoxx-logo.png"/>
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section class="main-slide">
+            <h1>DEVOXX<br/>FRANCE<br/>2025</h1>
+        </section>
+
+        <section class="title-slide">
+            <div class="left-band"></div>
+
+            <div class="title">
+                <h1>crane</h1>
+
+                <p class="subtitle">Rebase d'images Docker / OCI</p>
+            </div>
+            <div class="content">
+                <img src="assets/pp_2025.png" class="pp"/>
+                <span class="name">Julien Wittouck</span>
+                <span>Freelance <b>@CodeKaio</b></span>
+                <span>Associé <b>@Ekit3</b></span>
+                <span>Teacher <b>@univ-lille</b></span>
+                <span>Team <b>@Cloud-Nord</b></span>
+                <span>Technical Writer <b>@ENI</b></span>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text intro"><p>INTRODUCTION</p></div>
+            <div class="content schema-full">
+                <div class="r-stack">
+                    <img src="assets/diagram-intro-0.png"/>
+                    <img class="fragment fade-in-then-out" src="assets/diagram-intro-0-1.png"/>
+                    <img class="fragment fade-in-then-out" src="assets/diagram-intro-1.png"/>
+                    <img class="fragment fade-in-then-out" src="assets/diagram-intro-2.png"/>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
+                 data-background-opacity="0.3"
+        >
+            <h1>en shell</h1>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # authentification utilisateur
+                    gcloud auth login
+                </code>
+            </pre>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # listing de buckets
+                    gsutil ls
+                </code>
+            </pre>
+            <pre class="fragment">
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # token utilisateur
+                    bat /home/jwittouck/.config/gcloud/application_default_credentials.json
+                </code>
+            </pre>
+            <pre class="fragment">
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # requête à la main
+                    ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
+                    curl -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://storage.googleapis.com/storage/v1/b?project=devoxx-2024" | jq ".items[].name"
+                </code>
+            </pre>
+        </section>
+
+        <section class="demo-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
+                 data-background-opacity="0.3"
+        >
+            <h1>En Java</h1>
+            <pre>
+                <aside class="right" onclick="showWindow('idea')"><img src="streamdeck/intellij.png" style="margin: 0; height: 3rem;"/></aside>
+                <aside class="left">☕ java</aside>
+                <code data-trim data-noescape class="language-java">
+                    // lister les buckets
+                    public Stream&lt;Bucket&gt; stream() {
+                        var storage = StorageOptions.getDefaultInstance().getService();
+                        return storage.list().streamValues();
+                    }
+                </code>
+            </pre>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text intro"><p>INTRODUCTION</p></div>
+            <div class="content schema-full">
+                <div class="r-stack">
+                    <img src="assets/diagram-intro-3.png"/>
+                </div>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text vm"><p>sur une vm</p></div>
+            <div class="content schema-full">
+                <img src="assets/diagram-vm-0.png"/>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text vm"><p>sur une vm</p></div>
+            <div class="content schema-full">
+                <h2>Monter un service account</h2>
+                <img src="assets/diagram-vm-1.png"/>
+            </div>
+        </section>
+
+        <section class="demo-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
+                 data-background-opacity="0.3"
+        >
+            <h2>service account monté</h2>
+            <pre>
+                <aside class="right"
+                       onclick="firefox('https://console.cloud.google.com/compute/instancesDetail/zones/europe-west9-a/instances/devoxx-demo-instance?project=devoxx-2024')"><img
+                        src="streamdeck/firefox.png" style="margin: 0; height: 3rem;"/></aside>
+                <aside class="left">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    $ gcloud compute instances create devoxx-demo-instance-2024 \
+                        --project=devoxx-2024 \
+                        --zone=europe-west9-a \
+                        --machine-type=n2-standard-2 \
+                        --subnet=default \
+                        --service-account=devoxx-demo-sa@devoxx-2024.iam.gserviceaccount.com \
+                        --image=ubuntu-2310-mantic-amd64
+                </code>
+            </pre>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # connection SSH à la VM
+                    gcloud compute ssh devoxx-demo-instance
+                </code>
+            </pre>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # upload du java native
+                    gcloud compute scp \
+                        $DEMO_CODE/target/list-buckets devoxx-demo-instance:/home/jwittouck
+                </code>
+            </pre>
+        </section>
+
+        <section class="demo-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
+                 data-background-opacity="0.3"
+        >
+            <h2>Fouillons le code !</h2>
+            <pre>
+                <aside class="right" onclick="showWindow('idea')"><img src="streamdeck/intellij.png" style="margin: 0; height: 3rem;"/></aside>
+                <aside class="left">☕ java</aside>
+                <code data-trim data-html-noescape class="language-java">
+                    public static GoogleCredentials getApplicationDefault() {}
+                </code>
+            </pre>
+            <pre class="fragment">
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    gcloud compute ssh devoxx-demo-instance
+
+                    curl http://metadata.google.internal
+                </code>
+            </pre>
+            <pre class="fragment">
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                ACCESS_TOKEN=$(curl -s -H "Metadata-Flavor:Google" http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/devoxx-demo-sa@devoxx-2024.iam.gserviceaccount.com/token | jq -r ".access_token")
+                curl -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://storage.googleapis.com/storage/v1/b?project=devoxx-2024" | jq ".items[].name"
+                </code>
+            </pre>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text"><p>metadata</p></div>
+            <div class="content schema-full">
+
+                <h2>L'api metadata</h2>
+                <img src="assets/diagram-vm-2.png"/>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text"><p>sur kube</p></div>
+            <div class="content schema-full">
+                <h2>Sur Kube</h2>
+                <img src="assets/diagram-container-0.png"/>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text"><p>sur kube</p></div>
+            <div class="content schema-full">
+                <h2>metadata daemon set</h2>
+                <img src="assets/diagram-container-1.png"/>
+            </div>
+        </section>
+
+        <section class="demo-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
+                 data-background-opacity="0.3"
+        >
+            <h2>démo sur k8s</h2>
+            <pre>
+                <aside class="left">yaml</aside>
+                <code data-trim data-noescape class="language-yaml">
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-devoxx-2024
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-demo-app-sa
+  namespace: demo-devoxx-2024
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-app
+  namespace: demo-devoxx-2024
+spec:
+  containers:
+    - name: gcloud
+      image: gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
+      imagePullPolicy: Always
+      stdin: true
+      command:
+        - sh
+  restartPolicy: Always
+  serviceAccountName: k8s-demo-app-sa
+
+                </code>
+            </pre>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    k apply -f k8s/demo-app.yml
+
+                    k9s -n demo-devoxx-2024 -c pod
+                </code>
+            </pre>
+        </section>
+
+        <section class="demo-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
+                 data-background-opacity="0.3"
+        >
+            <h2>démo sur k8s</h2>
+
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    curl -s -H "Metadata-Flavor:Google" http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/
+                </code>
+            </pre>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    # on attache donne les droits au SA K8S
+                    gcloud projects add-iam-policy-binding devoxx-2024 \
+                    --member=principal://iam.googleapis.com/projects/623887975779/locations/global/workloadIdentityPools/devoxx-2024.svc.id.goog/subject/ns/demo-devoxx-2024/sa/k8s-demo-app-sa \
+                    --role=roles/storage.admin
+                </code>
+            </pre>
+            <pre>
+                <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                <code data-trim data-noescape class="language-bash">
+                    k exec -n demo-devoxx-2024 -it pod-demo-app -- bash
+                </code>
+            </pre>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text"><p>sur kube</p></div>
+            <div class="content schema-full">
+                <h2>metadata daemon set</h2>
+                <img src="assets/diagram-container-1.png"/>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-text conclusion"><p>conclusion</p></div>
+            <div class="content schema-full">
+                <h2>Rien de magique 🪄</h2>
+                <ul>
+                    <li class="fragment">infra 💙  code</li>
+                    <li class="fragment">⚠️ vendor lock-in (mono-cloud)</li>
+                    <li class="fragment">pas toujours besoin d'un 🔓 vault</li>
+                    <li class="fragment">⚠️ tout le monde peut lire les metadata ⏩ least-privilege</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="thanks-slide"
+                 data-background-image="./css/images/DevoxxFR2024_0050.jpg"
+                 data-background-opacity="0.3">
+            <h1>Merci !</h1>
+        </section>
+        <section class="main-slide" style="flex-direction: column">
+            <div class="content" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <img src="assets/profile-picture.png" class="pp"/>
+                <span class="name">Julien Wittouck</span>
+                <span style="display: flex; align-items: center;"><img src="/assets/twitter.png" style="width: 3vw;"/>&nbsp;@CodeKaio</span>
+                <span style="display: flex; align-items: center;"><img src="/assets/linkedin.png" style="width: 3vw;"/>&nbsp;julien-wittouck</span>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<!-- devoxx stamp -->
+<footer class="stamp">Devox<span>x</span> France 2025</footer>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+        display: 'flex',
+        disableLayout: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
+</html>
