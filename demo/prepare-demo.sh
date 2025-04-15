@@ -1,46 +1,49 @@
-#!/bin/sh
+#!/bin/bash
+
+cp() {
+  local SRC_IMAGE="$1"
+  local DST_IMAGE="$2"
+
+   # Pull the source image
+  docker image pull "$SRC_IMAGE"
+
+  # Tag the image with the new tag
+  docker image tag "${SRC_IMAGE}" "${DST_IMAGE}"
+
+  # Push the newly tagged image
+  docker image push "${DST_IMAGE}"
+}
 
 # prepares the demo by cleaning up and building what is needed
 
 REGISTRY=rg.fr-par.scw.cloud/devoxx-2025
+docker image rm -f $(docker image ls | grep $REGISTRY | awk '{print $3}')
+docker image rm -f $(docker image ls | grep '<none>' | awk '{print $3}')
 
-# delete old images
-#crane delete $REGISTRY/eclipse-temurin:23
-#crane delete $REGISTRY/eclipse-temurin:24
-#crane delete $REGISTRY/java-app:jdk-23
-#crane delete $REGISTRY/java-app:jdk-24
+#docker image pull eclipse-temurin:23
+cp eclipse-temurin:23.0.1_11-jdk $REGISTRY/eclipse-temurin:23
+cp eclipse-temurin:24 $REGISTRY/eclipse-temurin:24
+cp eclipse-temurin:latest $REGISTRY/eclipse-temurin:latest
+cp node:22 $REGISTRY/node:22
+cp node:23 $REGISTRY/node:23
+cp node:latest $REGISTRY/node:latest
 
-docker image rm $REGISTRY/eclipse-temurin:23
-docker image rm $REGISTRY/eclipse-temurin:24
-docker image rm $REGISTRY/java-app:jdk-23
-docker image rm $REGISTRY/java-app:jdk-24
+cp keycloak/keycloak $REGISTRY/keycloak
+cp redhat/ubi9-micro:9.5 $REGISTRY/redhat/ubi9-micro:9.5
+cp ubuntu $REGISTRY/ubuntu
 
-docker image pull eclipse-temurin:23
-docker image tag eclipse-temurin:23 $REGISTRY/eclipse-temurin:23
-docker image push $REGISTRY/eclipse-temurin:23
-
-docker image pull eclipse-temurin:24
-docker image tag eclipse-temurin:24 $REGISTRY/eclipse-temurin:24
-docker image push $REGISTRY/eclipse-temurin:24
-docker image tag eclipse-temurin:24 $REGISTRY/eclipse-temurin:latest
-docker image push $REGISTRY/eclipse-temurin:latest
-
-docker image pull node:22
-docker image tag node:22 $REGISTRY/node:22
-docker image push $REGISTRY/node:22
-
-docker image pull keycloak/keycloak
-docker image tag keycloak/keycloak $REGISTRY/keycloak
-docker image push $REGISTRY/keycloak
-
-cd simple-java
-docker image build --no-cache --push -t $REGISTRY/java-app:jdk-23 .
-cd ..
+#cd simple-java
+#docker image build --no-cache --push -t $REGISTRY/java-app:jdk-23 .
+#cd ..
 
 # build petclinic
 cd spring-petclinic
-docker image build --no-cache --push -t $REGISTRY/spring-petclinic:jdk-23 .
+docker image build --no-cache --push -t $REGISTRY/java-app:jdk-23 .
 cd ..
+
+#cd simple-nest
+#docker image build --no-cache --push -t $REGISTRY/nest-app:node-22 .
+#cd ..
 
 # demo
 # rebase petclinic eclipse-temurin 23 -> 24

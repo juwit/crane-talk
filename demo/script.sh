@@ -13,6 +13,12 @@ crane rebase \
   --tag $REGISTRY/spring-petclinic:jdk-24 \
   $REGISTRY/spring-petclinic:jdk-23
 
+crane rebase \
+  --old_base $REGISTRY/node:22 \
+  --new_base $REGISTRY/node:23 \
+  --tag $REGISTRY/nest-app:node-23 \
+  $REGISTRY/nest-app:node-22
+
 # rebase avec les annotations
 # lecture du manifest
 crane manifest $REGISTRY/java-app:jdk-23
@@ -27,6 +33,11 @@ crane mutate \
  -a "org.opencontainers.image.base.name=$REGISTRY/eclipse-temurin" \
  -a "org.opencontainers.image.base.digest=sha256:cb2693dd0d881fc66c3ed75f419d1a477fbef1d2433b6b79be654f22334700c8" \
  $REGISTRY/spring-petclinic:jdk-23
+
+crane mutate \
+ -a "org.opencontainers.image.base.name=$REGISTRY/node" \
+ -a "org.opencontainers.image.base.digest=$(crane digest $REGISTRY/node:22)" \
+ $REGISTRY/nest-app:node-22
 
 # rebase plus simple
 crane rebase \
