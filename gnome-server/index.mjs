@@ -12,7 +12,7 @@ app.use(cors());
 let lastKnownPosition;
 
 console.log("👻 starting the terminal")
-spawn("ghostty", ['--title=DevOxx 2025'])
+spawn("tilix", ['--title=DevOxx 2025'])
 
 let terminalWindowId;
 function getTerminalWindowId(){
@@ -20,17 +20,14 @@ function getTerminalWindowId(){
         return terminalWindowId
     }
     console.log("👻 getting terminal window id")
-    terminalWindowId = execSync(`wmctrl -lx | grep "ghostty" | awk '{print $1}'`, { encoding: 'utf8' }).trimEnd();
+    terminalWindowId = execSync(`wmctrl -lx | grep "tilix" | awk '{print $1}'`, { encoding: 'utf8' }).trimEnd();
+    execSync(`wmctrl -ir ${terminalWindowId} -e 0,50,60,1850,1024`);
     console.log(`👻 terminal window id : ${terminalWindowId}`)
     return terminalWindowId;
 }
 
 app.post('/show-window', async (req, res) => {
     console.log(`show window : ${JSON.stringify(req.body)}`)
-
-    const {top,left,width, height} = req.body;
-    execSync(`wmctrl -ir ${getTerminalWindowId()} -e 0,${top},${left},${width},${height}`);
-
     try{
         execSync(`wmctrl -i -a ${getTerminalWindowId()}`)
         res.sendStatus(200);
@@ -44,14 +41,13 @@ app.post('/hide-window', (req, res) => {
     console.log('hide window');
 
     // show presentation slides
-
-    execSync(`./streamdeck/show-window.sh 'Présentation'`);
+    execSync(`./streamdeck/show-window.sh 'firefox'`);
 
     res.sendStatus(200);
 });
 
 function type(command){
-    execSync(`setxkbmap fr && xdotool type --clearmodifiers --delay 100 '${command}'`);
+    execSync(`setxkbmap fr && xdotool type --clearmodifiers --delay 100 '${command.replaceAll("\n", "\r")}'`);
 }
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
