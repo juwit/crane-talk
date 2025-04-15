@@ -37,6 +37,4 @@ async function showDemo(element) {
 function hideDemo() {
     const demoSlide = document.querySelector("#demo-slide");
     demoSlide.classList.add("hidden");
-
-    hideWindow("tilix");
 }

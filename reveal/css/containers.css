@@ -35,6 +35,12 @@
     font-size: xxx-large;
 }
 
+.container.smaller {
+    padding-top: 0;
+    width: 300px;
+    font-size: xx-large;
+}
+
 .small > .layer {
     padding: 10px;
 }
