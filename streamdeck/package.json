@@ -1,0 +1,15 @@
+{
+  "name": "streamdeck",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "deckxstream": "deckxstream --config /home/jwittouck/workspaces/github/crane-talk/streamdeck/deckstream.json"
+  },
+  "devDependencies": {
+    "deckxstream": "^2.2.2"
+  }
+}

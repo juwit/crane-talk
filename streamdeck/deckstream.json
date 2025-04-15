@@ -1,0 +1,47 @@
+{
+  "deckxstream-version": 1,
+  "brightness": 90,
+  "device": "AL43J2C03377",
+  "pages": [
+    {
+      "pageName": "default",
+      "buttons": [
+        {
+          "keyIndex": 0,
+          "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/chrome.png",
+          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/dshow-window.sh chromium"
+        },
+        {
+          "keyIndex": 1,
+          "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/firefox.png",
+          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/show-window.sh firefox"
+        },
+        {
+          "keyIndex": 2,
+          "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/terminal.png",
+          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/show-demo.sh"
+        },
+        {
+          "keyIndex": 7,
+          "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/slides.png",
+          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/hide-demo.sh"
+        },
+        {
+          "keyIndex": 3,
+          "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/intellij.png",
+          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/show-window.sh idea"
+        },
+        {
+          "keyIndex": 5,
+          "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/left.png",
+          "command": "xdotool key Left"
+        },
+        {
+          "keyIndex": 9,
+          "icon": "/home/jwittouck/workspaces/github/service-accounts-talk/streamdeck/right.png",
+          "command": "xdotool key Right"
+        }
+      ]
+    }
+  ]
+}
