@@ -9,7 +9,7 @@
         {
           "keyIndex": 0,
           "icon": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/chrome.png",
-          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/dshow-window.sh chromium"
+          "command": "/home/jwittouck/workspaces/github/crane-talk/streamdeck/show-window.sh chromium"
         },
         {
           "keyIndex": 1,
