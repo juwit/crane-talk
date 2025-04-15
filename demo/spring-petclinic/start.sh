@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Java version"
-java version
+java -version
 
 echo "Distribution details"
 cat /etc/lsb-release

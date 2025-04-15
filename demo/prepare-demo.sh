@@ -38,7 +38,7 @@ cp ubuntu $REGISTRY/ubuntu
 
 # build petclinic
 cd spring-petclinic
-docker image build --no-cache --push -t $REGISTRY/java-app:jdk-23 .
+docker image build --push -t $REGISTRY/java-app:jdk-23 .
 cd ..
 
 #cd simple-nest
