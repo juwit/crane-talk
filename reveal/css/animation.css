@@ -1,0 +1,23 @@
+.rebase.visible {
+    animation-name: rebase;
+    animation-duration: 5s;
+    animation-fill-mode: both;
+}
+
+@-webkit-keyframes rebase {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    33% {
+        transform: translate3d(0, -100%, 0);
+    }
+
+    66% {
+        transform: translate3d(calc(100% + 5rem), -100%, 0);
+    }
+
+    100% {
+        transform: translate3d(calc(100% + 5rem), 0, 0);
+    }
+}

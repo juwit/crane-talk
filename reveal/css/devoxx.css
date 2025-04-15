@@ -105,6 +105,10 @@ h2 {
     font-family: OldMaquineCaps;
 }
 
+.reveal h2 {
+    margin-top: 3rem;
+}
+
 .reveal .slides > section {
     position: absolute;
     top: 0;
@@ -150,7 +154,7 @@ h2 {
 /* main slide */
 
 .main-slide {
-    background-image: url(images/devoxx2025_avatar_orange.jpg);
+    background-image: url(images/devoxx_2025_microphone.jpg);
     background-position: top left;
     background-position-x: -25vw;
     background-size: cover;
@@ -183,6 +187,7 @@ h2 {
 
 /* decorative left band */
 .title-slide > .left-band,
+.no-title-slide > .left-band,
 .left-band{
     position: absolute;
     left: -10%;
@@ -192,6 +197,7 @@ h2 {
     background-repeat: no-repeat;
     background-position: left;
     transform: rotate(-10deg);
+    z-index: -1;
 }
 .left-band::after {
     content: "";
@@ -200,7 +206,7 @@ h2 {
     position: absolute;
     top: -47%;
     left: 100%;
-    z-index: 1;
+    z-index: -1;
     background-image: url(images/slide-bg-25.png);
     background-repeat: no-repeat;
     background-position: left;
@@ -210,7 +216,7 @@ h2 {
 
 .title-slide .subtitle {
     font-family: OldMaquineCaps;
-    font-size: xxx-large;
+    font-size: 3.5rem;
 }
 
 .title-slide {
@@ -336,12 +342,13 @@ h2 {
 }
 
 .no-title-slide .content {
+    max-width: 80%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: start;
-    padding: 30px 30px 30px 250px;
+    padding: 200px 30px 30px 400px;
 }
 
 .no-title-slide .content p {
@@ -359,6 +366,12 @@ h2 {
  full size schema
  */
 .content.schema-full {
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+}
+
+.content.center {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -387,4 +400,50 @@ h2 {
     gap: 3vw;
     flex-grow: 0;
     align-items: center;
+}
+
+#demo-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("images/anastasiya-jjX1-W5ePcE-unsplash.jpg");
+    background-size: cover;
+    z-index: 100;
+    /*inset: 50% auto auto 50%;*/
+    /*transform: translate(-50%, -50%);*/
+}
+#demo-slide.hidden {
+    display: none;
+}
+#demo-slide {
+    display: block;
+}
+
+#demo-slide #demo-slide-window {
+    display: block;
+
+    position: absolute;
+    top: 6em;
+    left: 7em;
+
+    width: 90%;
+    height: 85%;
+
+    background-color: black;
+    /*box-shadow: 0 0 0.25rem #555;*/
+    /*border-radius: 0.25rem;*/
+}
+
+#demo-slide .logo {
+    position: absolute;
+    width: 5em;
+    height: 5em;
+    top: 2em;
+    left: 10em;
+}
+
+.reveal code {
+    background-color: #272822;
 }

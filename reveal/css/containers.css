@@ -1,0 +1,40 @@
+.container {
+    width: 400px;
+    padding-top: 50px;
+    margin: 20px auto;
+}
+
+.layer {
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    color: black;
+    text-align: center;
+    font-family: monospace;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.distribution {
+    background-color: #FFD966; /* Vert pour Ubuntu */
+}
+
+.runtime {
+    background-color: #E9883E; /* Bleu pour Temurin */
+}
+
+.application {
+    background-color: #8FAADC; /* Orange pour l'application */
+}
+
+.container.large {
+    width: 500px;
+}
+
+.container.small {
+    padding-top: 0;
+    font-size: xxx-large;
+}
+
+.small > .layer {
+    padding: 10px;
+}

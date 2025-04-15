@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="dist/reveal.css">
     <link rel="stylesheet" href="dist/theme/white.css">
     <link rel="stylesheet" href="css/devoxx.css">
+    <link rel="stylesheet" href="css/code-blocks.css">
+    <link rel="stylesheet" href="css/containers.css">
+    <link rel="stylesheet" href="css/animation.css">
 
     <link rel="icon" type="image/png" href="assets/devoxx-logo.png"/>
 
@@ -17,10 +20,96 @@
     <link rel="stylesheet" href="plugin/highlight/monokai.css">
 </head>
 <body>
+
+<!-- demo slide placeholder -->
+<div id="demo-slide"
+     class="hidden"
+>
+    <img class="logo" src="assets/logo-terminal.svg" onclick="hideDemo()">
+    <div id="demo-slide-window"></div>
+</div>
+
+<!-- main content -->
 <div class="reveal">
     <div class="slides">
+
+
         <section class="main-slide">
             <h1>DEVOXX<br/>FRANCE<br/>2025</h1>
+        </section>
+
+        <section class="thanks-slide"
+                 data-background-image="./css/images/devoxx2025_avatar_orange.jpg"
+                 data-background-opacity="0.3">
+            <div>
+                <h1>C'est l'histoire d'un ops</h1>
+                <p class="fragment">Qui gère des images Docker "de base"</p>
+                <p class="fragment">Qui sont utilisées par 260 micro-services</p>
+                <h2 class="fragment">🫡</h2>
+            </div>
+        </section>
+        <section class="thanks-slide"
+                 data-background-image="./css/images/devoxx2025_avatar_orange.jpg"
+                 data-background-opacity="0.3">
+            <div>
+                <h1>Une faille de sécurité dans une image de base</h1>
+                <p class="fragment">Implique de mettre à jour l'image de base et la re-construire</p>
+                <p class="fragment"><code>docker image build</code> && <code>docker image push</code></p>
+                <p class="fragment">Implique de mettre à jour 260 <code>Dockerfile</code></p>
+                <p class="fragment">Et relancer 260 pipelines de CI</p>
+                <h2 class="fragment">Bienvenue dans l'enfer OPS 😈🔥</h2>
+            </div>
+        </section>
+        <section class="thanks-slide"
+                 data-background-image="./css/images/devoxx2025_avatar_orange.jpg"
+                 data-background-opacity="0.3">
+            <div>
+                <h1>🤔</h1>
+                <p>si seulement on pouvait mettre à jour les images facilement</p>
+                <p>sans tout re-builder</p>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>Le paradis OPS</h1>
+                <p>Mise à jour des images sans re-builder</p>
+
+                <div style="display: flex; align-items: end; gap: 5rem; margin: 0 auto;">
+
+                    <div class="container large">
+                        <div class="fragment custom rebase">
+                            <div class="layer application ">
+                                application
+                            </div>
+                        </div>
+
+                        <div class="layer runtime">
+                            🔒 vieux certif<br/>
+                            java 23
+                        </div>
+
+                        <div class="layer distribution">
+                            💥 faille<br/>
+                            ubuntu
+                        </div>
+                    </div>
+
+                    <div class="container large">
+                        <div class="layer runtime">
+                            🔒 nouveaux certif<br/>
+                            java 23
+                        </div>
+
+                        <div class="layer distribution">
+                            sans faille 🎉<br/>
+                            ubuntu
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
         <section class="title-slide">
@@ -43,294 +132,526 @@
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text intro"><p>INTRODUCTION</p></div>
-            <div class="content schema-full">
-                <div class="r-stack">
-                    <img src="assets/diagram-intro-0.png"/>
-                    <img class="fragment fade-in-then-out" src="assets/diagram-intro-0-1.png"/>
-                    <img class="fragment fade-in-then-out" src="assets/diagram-intro-1.png"/>
-                    <img class="fragment fade-in-then-out" src="assets/diagram-intro-2.png"/>
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>Images OCI et Manifests</h1>
+
+                <div class="container">
+                    <div class="layer application slideUp">
+                        9e8e73ef
+                    </div>
+
+                    <div class="layer application slideUp">
+                        3afff29d
+                    </div>
+
+                    <div class="layer runtime">
+                        393ad826
+                    </div>
+                    <div class="layer runtime">
+                        5a7813e0
+                    </div>
+
+                    <div class="layer distribution">
+                        81bd62b8
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>Images OCI et Manifests</h1>
+
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        # docker inspect
+                        docker image inspect eclipse-temurin:24
+                    </code>
+                </pre>
+
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        TOKEN=$(curl -X GET "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/eclipse-temurin:pull" | jq -r .token)
+                        curl \
+                          -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                          -H "Authorization: Bearer $TOKEN" \
+                          https://registry-1.docker.io/v2/library/eclipse-temurin/manifests/sha256:393ad826422f9dbee85d4601304d7c68c6c8240251a4d9633dc66a1017eac7fd
+                    </code>
+                </pre>
+            </div>
+        </section>
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>Une Image OCI</h1>
+                <pre style="max-height: 60%;">
+                    <aside class="left">{} json</aside>
+                    <code data-trim data-noescape class="language-json">
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
+  "config": {
+    "mediaType": "application/vnd.oci.image.config.v1+json",
+    "digest": "sha256:57db53168f8cca5b3a2cbf1bb2c89a97c48762a501f481f53380567a00a9f1f6",
+    "size": 6071
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:5a7813e071bfadf18aaa6ca8318be4824a9b6297b3240f2cc84c1db6f4113040",
+      "size": 29754290
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:d1504bee8985780f3a868793411f26933d71ee828bc50880d128017596324321",
+      "size": 21318286
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:7b5a3507f742036dd166ee8b5a8ceeb35d451eacd472188cb43fdf7844a9e06b",
+      "size": 165317796
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:4f4fb700ef54461cfa02571ae0db9a0dc1e0cdb5577484a6d75e68dc38e8acc1",
+      "size": 32
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:ea28f6f7f0aa0864f252fa90ca3f85687428d91dd6f829f2ba81dc8719e2e3be",
+      "size": 2283
+    }
+  ],
+  "annotations": {
+    "com.docker.official-images.bashbrew.arch": "amd64",
+    "org.opencontainers.image.base.digest": "sha256:3afff29dffbc200d202546dc6c4f614edc3b109691e7ab4aa23d02b42ba86790",
+    "org.opencontainers.image.base.name": "ubuntu:24.04",
+    "org.opencontainers.image.created": "2025-01-30T14:32:57Z",
+    "org.opencontainers.image.revision": "766789f16156ca5424fbd3a1b435d6bcd13d14b0",
+    "org.opencontainers.image.source": "https://github.com/adoptium/containers.git#766789f16156ca5424fbd3a1b435d6bcd13d14b0:23/jdk/ubuntu/noble",
+    "org.opencontainers.image.url": "https://hub.docker.com/_/eclipse-temurin",
+    "org.opencontainers.image.version": "23.0.2_7-jdk-noble"
+  }
+}
+                    </code>
+                </pre>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>Rebase d'image</h1>
+
+                <div style="display: flex; align-items: end; gap: 5rem; margin: 0 auto;">
+
+                    <div class="container">
+                        <div class="fragment custom rebase">
+                            <div class="layer application ">
+                                9e8e73ef
+                            </div>
+
+                            <div class="layer application">
+                                3afff29d
+                            </div>
+                        </div>
+
+                        <div class="layer runtime">
+                            old-base
+                            393ad826
+                        </div>
+                        <div class="layer runtime">
+                            5a7813e0
+                        </div>
+
+                        <div class="layer distribution">
+                            81bd62b8
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="layer runtime">
+                            new-base
+                            8e2a1c85
+                        </div>
+                        <div class="layer runtime">
+                            694bb4ff
+                        </div>
+
+                        <div class="layer distribution">
+                            9e6d86c6
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>Rebase d'image</h1>
+
+                <p>Nouvelle image en manipulant le manifest JSON</p>
+
+                <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-evenly;">
+                    <div>
+                    <pre>
+                        <aside class="left" onclick="bashDemo(this)">{} json</aside>
+                        <code data-trim data-noescape class="language-json">
+    {
+      "layers" : [
+        { "digest": "sha256:9e8e73ef" },
+        { "digest": "sha256:3afff29d" },
+        { "digest": "sha256:393ad826" },
+        { "digest": "sha256:5a7813e0" },
+        { "digest": "sha256:81bd62b8" }
+      ]
+    }
+                        </code>
+                        </pre>
+                        <div style="display: flex; align-items: end; gap: 5rem; margin: 0 auto;">
+                            <div class="container small">
+                                <div class="layer application ">
+                                    9e8e73ef
+                                </div>
+
+                                <div class="layer application">
+                                    3afff29d
+                                </div>
+                                <div class="layer runtime">
+                                    393ad826
+                                </div>
+                                <div class="layer runtime">
+                                    5a7813e0
+                                </div>
+                                <div class="layer distribution">
+                                    81bd62b8
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                    <pre>
+                        <aside class="left" onclick="bashDemo(this)">{} json</aside>
+                        <code data-trim data-noescape class="language-json">
+{
+   "layers" : [
+     { "digest": "sha256:9e8e73ef" },
+     { "digest": "sha256:3afff29d" },
+     { "digest": "sha256:8e2a1c85" },
+     { "digest": "sha256:694bb4ff" },
+     { "digest": "sha256:9e6d86c6" }
+   ]
+}
+                        </code>
+                        </pre>
+                        <div style="display: flex; align-items: end; gap: 5rem; margin: 0 auto;">
+                            <div class="container small">
+                                <div class="layer application ">
+                                    9e8e73ef
+                                </div>
+
+                                <div class="layer application">
+                                    3afff29d
+                                </div>
+                                <div class="layer runtime">
+                                    8e2a1c85
+                                </div>
+                                <div class="layer runtime">
+                                    694bb4ff
+                                </div>
+                                <div class="layer distribution">
+                                    9e6d86c6
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>crane</h1>
+                <div style="display: flex">
+                    <div>
+                        <p style="display: flex; gap: 2rem; align-items: flex-end">
+                            <svg style="fill: white;" height="48" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="48" data-view-component="true" class="octicon octicon-mark-github">
+                                <path d="M12 1C5.9225 1 1 5.9225 1 12C1 16.8675 4.14875 20.9787 8.52125 22.4362C9.07125 22.5325 9.2775 22.2025 9.2775 21.9137C9.2775 21.6525 9.26375 20.7862 9.26375 19.865C6.5 20.3737 5.785 19.1912 5.565 18.5725C5.44125 18.2562 4.905 17.28 4.4375 17.0187C4.0525 16.8125 3.5025 16.3037 4.42375 16.29C5.29 16.2762 5.90875 17.0875 6.115 17.4175C7.105 19.0812 8.68625 18.6137 9.31875 18.325C9.415 17.61 9.70375 17.1287 10.02 16.8537C7.5725 16.5787 5.015 15.63 5.015 11.4225C5.015 10.2262 5.44125 9.23625 6.1425 8.46625C6.0325 8.19125 5.6475 7.06375 6.2525 5.55125C6.2525 5.55125 7.17375 5.2625 9.2775 6.67875C10.1575 6.43125 11.0925 6.3075 12.0275 6.3075C12.9625 6.3075 13.8975 6.43125 14.7775 6.67875C16.8813 5.24875 17.8025 5.55125 17.8025 5.55125C18.4075 7.06375 18.0225 8.19125 17.9125 8.46625C18.6138 9.23625 19.04 10.2125 19.04 11.4225C19.04 15.6437 16.4688 16.5787 14.0213 16.8537C14.42 17.1975 14.7638 17.8575 14.7638 18.8887C14.7638 20.36 14.75 21.5425 14.75 21.9137C14.75 22.2025 14.9563 22.5462 15.5063 22.4362C19.8513 20.9787 23 16.8537 23 12C23 5.9225 18.0775 1 12 1Z"></path>
+                            </svg>
+                            google/go-containerregistry
+                        </p>
+                        <br/>
+                        <p>
+                            manipulations d'images et de registries
+                        </p>
+                        <br/>
+                        <p>commandes intéressantes :</p>
+
+                        <pre>
+                            <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                            <code data-trim data-noescape class="language-bash">
+                                # récupération d'un manifest
+                                crane manifest
+                            </code>
+                        </pre>
+                        <pre>
+                            <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                            <code data-trim data-noescape class="language-bash">
+                                # rebase d'une image
+                                crane rebase
+                            </code>
+                        </pre>
+                        <pre>
+                            <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                            <code data-trim data-noescape class="language-bash">
+                                # modification générale d'un manifest
+                                crane mutate
+                            </code>
+                        </pre>
+                    </div>
+                    <img src="assets/crane-logo.png" style="width: 40%;"/>
                 </div>
             </div>
         </section>
 
-        <section class="demo-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
-                 data-background-opacity="0.3"
-        >
-            <h1>en shell</h1>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # authentification utilisateur
-                    gcloud auth login
-                </code>
-            </pre>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # listing de buckets
-                    gsutil ls
-                </code>
-            </pre>
-            <pre class="fragment">
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # token utilisateur
-                    bat /home/jwittouck/.config/gcloud/application_default_credentials.json
-                </code>
-            </pre>
-            <pre class="fragment">
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # requête à la main
-                    ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
-                    curl -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://storage.googleapis.com/storage/v1/b?project=devoxx-2024" | jq ".items[].name"
-                </code>
-            </pre>
-        </section>
-
-        <section class="demo-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
-                 data-background-opacity="0.3"
-        >
-            <h1>En Java</h1>
-            <pre>
-                <aside class="right" onclick="showWindow('idea')"><img src="streamdeck/intellij.png" style="margin: 0; height: 3rem;"/></aside>
-                <aside class="left">☕ java</aside>
-                <code data-trim data-noescape class="language-java">
-                    // lister les buckets
-                    public Stream&lt;Bucket&gt; stream() {
-                        var storage = StorageOptions.getDefaultInstance().getService();
-                        return storage.list().streamValues();
-                    }
-                </code>
-            </pre>
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content schema-full">
+                <h2><code>crane rebase</code> 🕹️</h2>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane rebase IMAGE \
+  --old_base OLD_BASE \
+  --new_base NEW_BASE \
+  --tag NEW_TAG
+                    </code>
+                </pre>
+            </div>
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text intro"><p>INTRODUCTION</p></div>
+            <div class="left-band"></div>
             <div class="content schema-full">
-                <div class="r-stack">
-                    <img src="assets/diagram-intro-3.png"/>
+                <h2>Démo 🕹️</h2>
+                <p>Rebase d'une image Java 23 -> 24</p>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane manifest $REGISTRY/java-app:jdk-23 | jq '.layers[].digest'
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane rebase $REGISTRY/java-app:jdk-23 \
+  --old_base $REGISTRY/eclipse-temurin:23 \
+  --new_base $REGISTRY/eclipse-temurin:24 \
+  --tag $REGISTRY/java-app:jdk-24
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane manifest $REGISTRY/java-app:jdk-24 | jq '.layers[].digest'
+                    </code>
+                </pre>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content schema-full">
+                <h2>Pour rigoler 😅️</h2>
+                <div style="width: 80%;">
+                <p>Détection d'une image de base</p>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+docker scout quickview $REGISTRY/keycloak
+                    </code>
+                </pre>
+                </div>
+                <div class="fragment" style="width: 80%;">
+                    <p>Rebase de l'image</p>
+                    <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane rebase $REGISTRY/keycloak \
+  --old_base $REGISTRY/redhat/ubi9-micro:9.5 \
+  --new_base $REGISTRY/ubuntu \
+  --tag $REGISTRY/keycloak:ubuntu
+                    </code>
+                    </pre>
                 </div>
             </div>
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text vm"><p>sur une vm</p></div>
+            <div class="left-band"></div>
             <div class="content schema-full">
-                <img src="assets/diagram-vm-0.png"/>
+
             </div>
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text vm"><p>sur une vm</p></div>
+            <div class="left-band"></div>
             <div class="content schema-full">
-                <h2>Monter un service account</h2>
-                <img src="assets/diagram-vm-1.png"/>
-            </div>
-        </section>
+                <h2><code>--old_base</code> <code>--new_base</code></h2>
+                <p>Paramètres un peu casse-pied</p>
+                <h2>Annotations Hints</h2>
+                <br/>
+                <p>Annotations définies dans la spec OCI :
+                    <a href="https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys">opencontainers/image-spec#annotations.md</a></p>
 
-        <section class="demo-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
-                 data-background-opacity="0.3"
-        >
-            <h2>service account monté</h2>
-            <pre>
-                <aside class="right"
-                       onclick="firefox('https://console.cloud.google.com/compute/instancesDetail/zones/europe-west9-a/instances/devoxx-demo-instance?project=devoxx-2024')"><img
-                        src="streamdeck/firefox.png" style="margin: 0; height: 3rem;"/></aside>
-                <aside class="left">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    $ gcloud compute instances create devoxx-demo-instance-2024 \
-                        --project=devoxx-2024 \
-                        --zone=europe-west9-a \
-                        --machine-type=n2-standard-2 \
-                        --subnet=default \
-                        --service-account=devoxx-demo-sa@devoxx-2024.iam.gserviceaccount.com \
-                        --image=ubuntu-2310-mantic-amd64
-                </code>
-            </pre>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # connection SSH à la VM
-                    gcloud compute ssh devoxx-demo-instance
-                </code>
-            </pre>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # upload du java native
-                    gcloud compute scp \
-                        $DEMO_CODE/target/list-buckets devoxx-demo-instance:/home/jwittouck
-                </code>
-            </pre>
-        </section>
-
-        <section class="demo-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
-                 data-background-opacity="0.3"
-        >
-            <h2>Fouillons le code !</h2>
-            <pre>
-                <aside class="right" onclick="showWindow('idea')"><img src="streamdeck/intellij.png" style="margin: 0; height: 3rem;"/></aside>
-                <aside class="left">☕ java</aside>
-                <code data-trim data-html-noescape class="language-java">
-                    public static GoogleCredentials getApplicationDefault() {}
-                </code>
-            </pre>
-            <pre class="fragment">
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    gcloud compute ssh devoxx-demo-instance
-
-                    curl http://metadata.google.internal
-                </code>
-            </pre>
-            <pre class="fragment">
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                ACCESS_TOKEN=$(curl -s -H "Metadata-Flavor:Google" http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/devoxx-demo-sa@devoxx-2024.iam.gserviceaccount.com/token | jq -r ".access_token")
-                curl -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://storage.googleapis.com/storage/v1/b?project=devoxx-2024" | jq ".items[].name"
-                </code>
-            </pre>
-        </section>
-
-        <section class="no-title-slide">
-            <div class="left-text"><p>metadata</p></div>
-            <div class="content schema-full">
-
-                <h2>L'api metadata</h2>
-                <img src="assets/diagram-vm-2.png"/>
+                <code>org.opencontainers.image.base.digest</code>
+                <code>org.opencontainers.image.base.name</code>
+                <p>old base et new base inférés à partir des annotations</p>
             </div>
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text"><p>sur kube</p></div>
+            <div class="left-band"></div>
             <div class="content schema-full">
-                <h2>Sur Kube</h2>
-                <img src="assets/diagram-container-0.png"/>
+                <h2>Annotations Hints</h2>
+                <p>Annoter les images avec <code>docker image build</code></p>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+DIGEST=$(crane digest $REGISTRY/eclipse-temurin:23)
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+docker image build --tag $REGISTRY/java-app:jdk-23 \
+    --annotation "org.opencontainers.image.base.name=$REGISTRY/eclipse-temurin" \
+    --annotation "org.opencontainers.image.base.digest=$DIGEST"
+                    </code>
+                </pre>
             </div>
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text"><p>sur kube</p></div>
+            <div class="left-band"></div>
             <div class="content schema-full">
-                <h2>metadata daemon set</h2>
-                <img src="assets/diagram-container-1.png"/>
-            </div>
-        </section>
-
-        <section class="demo-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
-                 data-background-opacity="0.3"
-        >
-            <h2>démo sur k8s</h2>
-            <pre>
-                <aside class="left">yaml</aside>
-                <code data-trim data-noescape class="language-yaml">
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: demo-devoxx-2024
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: k8s-demo-app-sa
-  namespace: demo-devoxx-2024
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-app
-  namespace: demo-devoxx-2024
-spec:
-  containers:
-    - name: gcloud
-      image: gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
-      imagePullPolicy: Always
-      stdin: true
-      command:
-        - sh
-  restartPolicy: Always
-  serviceAccountName: k8s-demo-app-sa
-
-                </code>
-            </pre>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    k apply -f k8s/demo-app.yml
-
-                    k9s -n demo-devoxx-2024 -c pod
-                </code>
-            </pre>
-        </section>
-
-        <section class="demo-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0033.jpg"
-                 data-background-opacity="0.3"
-        >
-            <h2>démo sur k8s</h2>
-
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    curl -s -H "Metadata-Flavor:Google" http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/
-                </code>
-            </pre>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    # on attache donne les droits au SA K8S
-                    gcloud projects add-iam-policy-binding devoxx-2024 \
-                    --member=principal://iam.googleapis.com/projects/623887975779/locations/global/workloadIdentityPools/devoxx-2024.svc.id.goog/subject/ns/demo-devoxx-2024/sa/k8s-demo-app-sa \
-                    --role=roles/storage.admin
-                </code>
-            </pre>
-            <pre>
-                <aside class="left" onclick="bashDemo(this)">> bash</aside>
-                <code data-trim data-noescape class="language-bash">
-                    k exec -n demo-devoxx-2024 -it pod-demo-app -- bash
-                </code>
-            </pre>
-        </section>
-
-        <section class="no-title-slide">
-            <div class="left-text"><p>sur kube</p></div>
-            <div class="content schema-full">
-                <h2>metadata daemon set</h2>
-                <img src="assets/diagram-container-1.png"/>
+                <h2>Démo 🕹️</h2>
+                <p>Annoter les images avec <code>crane mutate</code></p>
+                <p>Annoter l'image Java 23</p>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+DIGEST=$(crane digest $REGISTRY/eclipse-temurin:23)
+crane mutate $REGISTRY/java-app:jdk-23 \
+  -a "org.opencontainers.image.base.name=$REGISTRY/eclipse-temurin:23" \
+  -a "org.opencontainers.image.base.digest=$DIGEST"
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane manifest $REGISTRY/java-app:jdk-23 | jq
+                    </code>
+                </pre>
             </div>
         </section>
 
         <section class="no-title-slide">
-            <div class="left-text conclusion"><p>conclusion</p></div>
+            <div class="left-band"></div>
             <div class="content schema-full">
-                <h2>Rien de magique 🪄</h2>
+                <h2>Démo 🕹️</h2>
+                <p>Rebase simplifié</p>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        crane manifest $REGISTRY/java-app:jdk-23 | jq
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        docker image tag eclipse-temurin:23.0.2_7-jdk $REGISTRY/eclipse-temurin:23
+                        docker image push $REGISTRY/eclipse-temurin:23
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        # rebase avec écrasement du tag !
+                        crane rebase $REGISTRY/java-app:jdk-23
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        crane manifest $REGISTRY/java-app:jdk-23 | jq
+                    </code>
+                </pre>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content center">
+                <h2>Limites 🛑</h2>
                 <ul>
-                    <li class="fragment">infra 💙  code</li>
-                    <li class="fragment">⚠️ vendor lock-in (mono-cloud)</li>
-                    <li class="fragment">pas toujours besoin d'un 🔓 vault</li>
-                    <li class="fragment">⚠️ tout le monde peut lire les metadata ⏩ least-privilege</li>
+                    <li class="fragment">aucune garantie de fonctionnement des images 🏷️</li>
+                    <li class="fragment">reports à effectuer sur les Dockerfile 🔙</li>
+                    <li class="fragment">impossible de couper à partir d'une layer arbitraire ✂️</li>
+                    <li class="fragment">cherry-pick ? 🍒</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content center">
+                <h2>Bonnes pratiques ✅</h2>
+                <ul>
+                    <li class="fragment">toujours re-tagguer les images 🏷️</li>
+                    <li class="fragment">tester les images rebasées ⚗️(avec <i>Container Structure Test</i>)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content center">
+                <h2>Cas d'usages concrets 💡📝</h2>
+                <ul>
+                    <li class="fragment">Patchs des images sans les rebuilder 🧰</li>
+                    <li class="fragment">Montées de version de runtime ⬆️</li>
+                    <li class="fragment">Ajout ou suppression de packages ➕</li>
+                    <li class="fragment">Mise à jour de certificats 🔒</li>
                 </ul>
             </div>
         </section>
 
         <section class="thanks-slide"
-                 data-background-image="./css/images/DevoxxFR2024_0050.jpg"
+                 data-background-image="./css/images/devoxx_2025_microphone.jpg"
                  data-background-opacity="0.3">
             <h1>Merci !</h1>
         </section>
         <section class="main-slide" style="flex-direction: column">
             <div class="content" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <img src="assets/profile-picture.png" class="pp"/>
+                <img src="assets/pp_2025.png" class="pp"/>
                 <span class="name">Julien Wittouck</span>
-                <span style="display: flex; align-items: center;"><img src="/assets/twitter.png" style="width: 3vw;"/>&nbsp;@CodeKaio</span>
-                <span style="display: flex; align-items: center;"><img src="/assets/linkedin.png" style="width: 3vw;"/>&nbsp;julien-wittouck</span>
+                <span style="display: flex; align-items: center;"><img src="assets/bluesky.png" style="width: 3vw;"/>&nbsp;@CodeKaio</span>
+                <span style="display: flex; align-items: center;"><img src="assets/linkedin.png" style="width: 3vw;"/>&nbsp;julien-wittouck</span>
             </div>
         </section>
 
@@ -344,6 +665,7 @@ spec:
 <script src="plugin/notes/notes.js"></script>
 <script src="plugin/markdown/markdown.js"></script>
 <script src="plugin/highlight/highlight.js"></script>
+<script src="js/demo.js"></script>
 <script>
     // More info about initialization & config:
     // - https://revealjs.com/initialization/
@@ -354,7 +676,12 @@ spec:
         disableLayout: true,
 
         // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
+
+        keyboard: {
+            68: () => showDemo(),
+            69: () => hideDemo(),
+        }
     });
 </script>
 </body>

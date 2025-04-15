@@ -1,0 +1,53 @@
+code.hljs {
+    border: solid 2px #ccc;
+    border-radius: 10px;
+
+    padding-top: 30px;
+}
+
+.reveal pre {
+    /*width: 60%;*/
+    /*max-width: 60%;*/
+}
+
+.reveal .hljs {
+    min-height: auto;
+}
+
+.reveal pre code {
+    /*padding-top: 2rem;*/
+    padding: 1vw;
+    max-height: 100%;
+}
+
+.reveal pre aside.left + code {
+    padding-top: 2vw;
+}
+.reveal pre aside{
+    display: block;
+    position: absolute;
+    top: -1rem;
+
+    background: #333;
+    padding: 10px 10px 5px 10px;
+    border-radius: 10px;
+
+    font-family: "Mono";
+    font-weight: bold;
+    color: white;
+
+    z-index: 300;
+}
+.reveal pre aside.right {
+    right: 2rem;
+}
+.reveal pre aside.left {
+    left: 2rem;
+}
+
+/* inline code decoration */
+code {
+    font-weight: normal;
+    background-color: #CCC;
+    padding: 0.5rem;
+}
