@@ -55,9 +55,10 @@
                 <h1>Une faille de sécurité dans une image de base</h1>
                 <p class="fragment">Implique de mettre à jour l'image de base et la re-construire</p>
                 <p class="fragment"><code>docker image build</code> && <code>docker image push</code></p>
-                <p class="fragment">Implique de mettre à jour 260 <code>Dockerfile</code></p>
+                <p class="fragment">Il faut mettre à jour 260 <code>Dockerfile</code></p>
                 <p class="fragment">Et relancer 260 pipelines de CI</p>
-                <h2 class="fragment">Bienvenue dans l'enfer OPS 😈🔥</h2>
+                <p class="fragment">Ça va prendre des jours</p>
+                <h2 class="fragment">🔥😈 Bienvenue dans l'enfer OPS 😈🔥</h2>
             </div>
         </section>
         <section class="thanks-slide"
@@ -133,19 +134,6 @@
 
         <section class="no-title-slide">
             <div class="left-band"></div>
-            <div class="content center">
-                <h2>Cas d'usages concrets 💡📝</h2>
-                <ul>
-                    <li class="fragment">Patchs des images sans les rebuilder 🧰</li>
-                    <li class="fragment">Montées de version de runtime ⬆️</li>
-                    <li class="fragment">Ajout ou suppression de packages ➕</li>
-                    <li class="fragment">Mise à jour de certificats 🔒</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="no-title-slide">
-            <div class="left-band"></div>
             <div class="content">
                 <h1>Images OCI et Manifests</h1>
 
@@ -175,7 +163,7 @@
 
         <section class="no-title-slide">
             <div class="left-band"></div>
-            <div class="content">
+            <div class="content center">
                 <h1>Images OCI et Manifests</h1>
 
                 <pre>
@@ -261,10 +249,10 @@
             <div class="content center">
                 <h2>Manipuler les images OCI</h2>
                 <ul>
-                    <li class="fragment">Manipuler directement le manifest JSON</li>
-                    <li class="fragment">Pull / Push depuis le registry</li>
-                    <li class="fragment">Réagencer les layers</li>
-                    <li class="fragment">Sans rebuilder, ni même avoir besoin de <code>docker</code></li>
+                    <li class="fragment">🔧 Manipuler directement le manifest JSON {}</li>
+                    <li class="fragment">↔️ Pull / Push du manifest depuis le registry</li>
+                    <li class="fragment">🔃 Réagencer les layers</li>
+                    <li class="fragment">♻️ Sans rebuilder, ni même avoir besoin de <code>docker</code></li>
                 </ul>
             </div>
         </section>
@@ -405,6 +393,20 @@
 
             </div>
         </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content center">
+                <h2>Cas d'usages concrets 💡📝</h2>
+                <ul>
+                    <li class="fragment">Patchs des images sans les rebuilder 🧰</li>
+                    <li class="fragment">Montées de version de runtime ⬆️</li>
+                    <li class="fragment">Ajout ou suppression de packages ➕</li>
+                    <li class="fragment">Mise à jour de certificats 🔒</li>
+                </ul>
+            </div>
+        </section>
+
 
         <section class="no-title-slide">
             <div class="left-band"></div>
@@ -560,6 +562,7 @@ docker container run --rm -it $REGISTRY/java-app:jdk-23
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane manifest $REGISTRY/java-app:jdk-23 | jq ".layers[].digest"
+crane manifest $REGISTRY/eclipse-temurin:23 | jq ".layers[].digest"
                     </code>
                 </pre>
                 <pre>
@@ -575,6 +578,7 @@ crane rebase $REGISTRY/java-app:jdk-23 \
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane manifest $REGISTRY/java-app:jdk-24 | jq ".layers[].digest"
+crane manifest $REGISTRY/eclipse-temurin:24 | jq ".layers[].digest"
                     </code>
                 </pre>
             </div>
@@ -717,8 +721,8 @@ crane manifest $REGISTRY/java-app:jdk-23 | jq
                 <pre>
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
-                        crane manifest $REGISTRY/eclipse-temurin:23 | jq ".layers[].digest"
                         crane manifest $REGISTRY/java-app:jdk-23 | jq ".layers[].digest"
+                        crane manifest $REGISTRY/eclipse-temurin:23.0.2_7-jdk | jq ".layers[].digest"
                     </code>
                 </pre>
             </div>

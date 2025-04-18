@@ -17,13 +17,14 @@ cp() {
 # prepares the demo by cleaning up and building what is needed
 
 REGISTRY=rg.fr-par.scw.cloud/devoxx-2025
-docker image rm -f $(docker image ls | grep $REGISTRY | awk '{print $3}')
-docker image rm -f $(docker image ls | grep '<none>' | awk '{print $3}')
+#docker image rm -f $(docker image ls | grep $REGISTRY | awk '{print $3}')
+#docker image rm -f $(docker image ls | grep '<none>' | awk '{print $3}')
 
 #docker image pull eclipse-temurin:23
+cp eclipse-temurin:23.0.1_11-jdk $REGISTRY/eclipse-temurin:23.0.1_11-jdk
 cp eclipse-temurin:23.0.1_11-jdk $REGISTRY/eclipse-temurin:23
+cp eclipse-temurin:23.0.2_7-jdk $REGISTRY/eclipse-temurin:23.0.2_7-jdk
 cp eclipse-temurin:24 $REGISTRY/eclipse-temurin:24
-cp eclipse-temurin:latest $REGISTRY/eclipse-temurin:latest
 cp node:22 $REGISTRY/node:22
 cp node:23 $REGISTRY/node:23
 cp node:latest $REGISTRY/node:latest

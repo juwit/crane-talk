@@ -156,7 +156,7 @@ h2 {
 .main-slide {
     background-image: url(images/devoxx_2025_microphone.jpg);
     background-position: top left;
-    background-position-x: -25vw;
+    background-position-x: -40vw;
     background-size: cover;
     background-repeat: no-repeat;
     padding-left: 50%;
@@ -263,7 +263,6 @@ h2 {
     align-items: flex-end;
     justify-content: center;
     flex-shrink: 1;
-
 }
 
 .title-slide .title .subtitle {
