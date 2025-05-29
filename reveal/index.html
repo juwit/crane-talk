@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>DEVOXX FRANCE 2025 - Rebase d'images Docker / OCI avec crane</title>
+    <title>DEVLILLE 2025 - Rebase d'images Docker / OCI avec crane</title>
 
     <link rel="stylesheet" href="dist/reset.css">
     <link rel="stylesheet" href="dist/reveal.css">
     <link rel="stylesheet" href="dist/theme/white.css">
-    <link rel="stylesheet" href="css/devoxx.css">
+    <link rel="stylesheet" href="css/devlille.css">
     <link rel="stylesheet" href="css/code-blocks.css">
     <link rel="stylesheet" href="css/containers.css">
     <link rel="stylesheet" href="css/animation.css">
 
-    <link rel="icon" type="image/png" href="assets/devoxx-logo.png"/>
+    <link rel="icon" type="image/png" href="assets/devlille-logo.png"/>
 
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="plugin/highlight/monokai.css">
@@ -35,21 +35,25 @@
 
 
         <section class="main-slide">
-            <h1>DEVOXX<br/>FRANCE<br/>2025</h1>
+            <h1>DEVLILLE<br/>2025</h1>
         </section>
 
         <section class="thanks-slide"
-                 data-background-image="./css/images/devoxx2025_avatar_orange.jpg"
+                 data-background-image="./css/images/devlille-teaser25.png"
+                 data-background-size="contain"
+                 data-background-position="left"
                  data-background-opacity="0.3">
             <div>
-                <h1>C'est l'histoire d'un ops</h1>
+                <h1>C'est l'histoire d'un.e ops</h1>
                 <p class="fragment">Qui gère des images Docker "de base"</p>
                 <p class="fragment">Qui sont utilisées par 260 micro-services</p>
                 <h2 class="fragment">🫡</h2>
             </div>
         </section>
         <section class="thanks-slide"
-                 data-background-image="./css/images/devoxx2025_avatar_orange.jpg"
+                 data-background-image="./css/images/devlille-teaser25.png"
+                 data-background-size="contain"
+                 data-background-position="left"
                  data-background-opacity="0.3">
             <div>
                 <h1>Une faille de sécurité dans une image de base</h1>
@@ -62,7 +66,9 @@
             </div>
         </section>
         <section class="thanks-slide"
-                 data-background-image="./css/images/devoxx2025_avatar_orange.jpg"
+                 data-background-image="./css/images/devlille-teaser25.png"
+                 data-background-size="contain"
+                 data-background-position="left"
                  data-background-opacity="0.3">
             <div>
                 <h1>🤔</h1>
@@ -77,7 +83,7 @@
                 <h1>Le paradis OPS</h1>
                 <p>Mise à jour des images sans re-builder</p>
 
-                <div style="display: flex; align-items: end; gap: 5rem; margin: 0 auto;">
+                <div style="display: flex; align-items: end; gap: 5rem; margin: 0 auto; margin-top: 5rem;">
 
                     <div class="container large">
                         <div class="fragment custom rebase">
@@ -114,8 +120,6 @@
         </section>
 
         <section class="title-slide">
-            <div class="left-band"></div>
-
             <div class="title">
                 <h1>crane</h1>
 
@@ -249,7 +253,7 @@
             <div class="content center">
                 <h2>Manipuler les images OCI</h2>
                 <ul>
-                    <li class="fragment">🔧 Manipuler directement le manifest JSON {}</li>
+                    <li class="fragment">🔧 Manipuler directement le manifest JSON <code>{}</code></li>
                     <li class="fragment">↔️ Pull / Push du manifest depuis le registry</li>
                     <li class="fragment">🔃 Réagencer les layers</li>
                     <li class="fragment">♻️ Sans rebuilder, ni même avoir besoin de <code>docker</code></li>
@@ -587,6 +591,35 @@ crane manifest $REGISTRY/eclipse-temurin:24 | jq ".layers[].digest"
         <section class="no-title-slide">
             <div class="left-band"></div>
             <div class="content schema-full">
+                <h2>Démo 🕹️</h2>
+                <p>Ajout d'un agent OpenTelemetry</p>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+docker container run --rm -it $REGISTRY/java-app:jdk-23
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane rebase $REGISTRY/java-app:jdk-23 \
+  --old_base $REGISTRY/eclipse-temurin:23 \
+  --new_base $REGISTRY/eclipse-temurin-with-otel:24 \
+  --tag $REGISTRY/java-app:jdk-24-otel
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+crane manifest $REGISTRY/java-app:jdk-24-otel | jq ".layers[].digest"
+                    </code>
+                </pre>
+            </div>
+        </section>
+
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content schema-full">
                 <h2>Pour rigoler 😅️</h2>
                 <div style="width: 80%;">
                 <p>Détection d'une image de base</p>
@@ -610,7 +643,7 @@ crane rebase $REGISTRY/keycloak \
                     </pre>
                 </div>
                 <div class="fragment" style="width: 80%;">
-                    <p>Rebase pété 💥</p>
+                    <p>Rebase complètement pété 💥</p>
                     <pre>
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
@@ -747,25 +780,24 @@ crane manifest $REGISTRY/java-app:jdk-23 | jq
         </section>
 
         <section class="thanks-slide"
-                 data-background-image="./css/images/devoxx_2025_microphone.jpg"
-                 data-background-opacity="0.3">
+                 data-background-image="./css/images/devlille-teaser25.png"
+                 data-background-size="contain"
+                 data-background-position="left"
+                 data-background-opacity="1">
             <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <h1>Merci !</h1>
-                <img src="assets/qr-code.png" style="width:30%;"/>
+                <img src="assets/qr-code-devlille.png" style="width:30%;"/>
             </div>
             <div>
                 <img src="assets/pp_2025.png" class="pp"/>
                 <span class="name">Julien Wittouck</span>
-                <span style="display: flex; align-items: center;"><img src="assets/bluesky.png" style="width: 3vw;"/>&nbsp;@CodeKaio</span>
+                <span style="display: flex; align-items: center;"><img src="assets/bluesky.png" style="width: 3vw;"/>&nbsp;@codeka.io</span>
                 <span style="display: flex; align-items: center;"><img src="assets/linkedin.png" style="width: 3vw;"/>&nbsp;julien-wittouck</span>
             </div>
         </section>
 
     </div>
 </div>
-
-<!-- devoxx stamp -->
-<footer class="stamp">Devox<span>x</span> France 2025</footer>
 
 <script src="dist/reveal.js"></script>
 <script src="plugin/notes/notes.js"></script>

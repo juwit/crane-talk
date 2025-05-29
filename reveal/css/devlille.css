@@ -1,0 +1,372 @@
+@font-face {
+    font-family: Outfit;
+    src: url("fonts/Outfit-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: OpenSans;
+    src: url("fonts/OpenSans-Regular.ttf") format("truetype");
+}
+
+:root {
+    /* devlille 2025 colors */
+    --color-bg-main: #005779;
+    --color-bg-alternate: #0075a3;
+    --color-bg-highlight: #FFBB3D;
+    --color-bg-black: #000000;
+
+    --color-main-schema: #FFBB3D;
+    --color-main-white: #FFF2BD;
+    --color-alternate1: #F9C3E6;
+    --color-alternate2: #C2F9D2;
+    /* /devlille 2025 colors */
+
+    --sd-heading1-size: 5vw;
+    --sd-heading1-line-height: 1;
+    --sd-heading2-size: 5vw;
+    --sd-heading2-line-height: 0.5;
+    --sd-text-size: 2.2vw;
+    --sd-text-line-height: 1.2;
+
+    --sd-background-color: var(--color-bg-black);
+    /* change with your devoxx theme color */
+    --sd-primary-color: var(--color-main-schema);
+    --sd-heading-color: var(--sd-primary-color);
+    --sd-text-color: #ffffff;
+
+
+    --r-background-color: var(--color-bg-main);
+    --r-main-color: #fff;
+
+    --r-main-font: Outfit, sans-serif;
+    --r-block-margin: 20px;
+    --r-heading-margin: 0 0 20px 0;
+
+    --r-heading-font: Outfit, sans-serif;
+
+    --r-heading-color: var(--color-main-schema);
+    --r-heading-line-height: 1.2;
+
+    --r-heading-letter-spacing: normal;
+    --r-heading-text-transform: uppercase;
+    --r-heading-text-shadow: none;
+    --r-heading-font-weight: normal;
+
+    --r-heading1-size: 10vh;
+    --r-heading1-font-weight: 400;
+
+    --r-heading2-size: 8vh;
+    --r-heading3-size: 1.55em;
+    --r-heading4-size: 1em;
+
+    --r-main-font-size: 2.2vw;
+
+    --r-code-font: monospace;
+    --r-link-color: var(--color-main-schema);
+    --r-link-color-dark: var(--color-main-schema);
+    --r-link-color-hover: var(--color-main-schema);
+    --r-selection-background-color: var(--color-alternate1);
+    --r-selection-color: #fff;
+    --r-overlay-element-bg-color: 0, 0, 0;
+    --r-overlay-element-fg-color: 240, 240, 240;
+}
+
+.slides > section {
+    height : 100%;
+}
+
+.slides {
+    border-bottom: solid 30px var(--color-main-schema);
+    box-sizing: border-box;
+}
+
+.reveal .controls {
+    bottom: 40px;
+}
+
+i,
+.i {
+    font-family: "Open Sans Italic";
+}
+
+h1,
+h2 {
+    font-family: OldMaquineCaps;
+}
+
+.reveal h2 {
+    margin-top: 3rem;
+}
+
+.reveal .slides > section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    width: auto;
+    align-items: center;
+    justify-content: center;
+    /*background-color: var(--color-bg-alternate);*/
+}
+
+/* bottom bar */
+.sd-slide::after {
+    content: "";
+    height: 20px;
+    width: 100%;
+    position: absolute;
+    background-color: var(--sd-primary-color);
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+}
+
+/* stamp Devoxx 2024 */
+.stamp {
+    position: absolute;
+    background-color: var(--color-bg-alternate);
+    color: white;
+    top: 0;
+    right: 0;
+    font-family: Pirulen;
+    font-size: 1vw;
+    padding: 10px 20px;
+    z-index: 100;
+}
+
+.stamp span {
+    color: var(--color-bg-highlight);
+}
+
+/* main slide */
+
+.main-slide {
+    background-image: url(images/devlille-teaser25.png);
+    background-position: top left;
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding-left: 50%;
+}
+
+.main-slide h1 {
+    font-size: 125px;
+}
+
+.slide-background.main-slide.present,
+.slide-background.title-slide.present {
+    visibility: hidden;
+}
+/* / main slide */
+
+/* decorative left band */
+.title-slide > .left-band,
+.no-title-slide > .left-band,
+.left-band{
+    position: absolute;
+    left: -10%;
+    width: 400px;
+    height: 120%;
+    background-color: var(--color-bg-alternate);
+    background-repeat: no-repeat;
+    background-position: left;
+    transform: rotate(10deg);
+    z-index: -1;
+}
+.left-band::before {
+    content: "";
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 40%;
+    z-index: -1;
+    background-image: url(images/devlille-logo25-png.png);
+    background-repeat: no-repeat;
+    background-size: 200px;
+    transform: rotate(-10deg);
+}
+.left-band::after {
+    content: "25";
+    color: white;
+    z-index: 1;
+}
+
+/* title slide */
+
+.title-slide .subtitle {
+    font-size: 3.5rem;
+}
+
+.title-slide {
+    background-image: url(images/devlille-teaser25.png);
+    background-position: top left;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    font-family: Outfit;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+.title-slide > div {
+    height: 100%;
+}
+
+.title-slide .title {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    flex-shrink: 1;
+}
+
+.title-slide .title .subtitle {
+    margin: 0;
+    text-align: right;
+}
+
+.title-slide .content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: end;
+    padding-bottom: 3vw;
+    padding-right: 130px;
+    padding-left: 100px;
+    flex-shrink: 0;
+}
+
+.title-slide .content p {
+    text-align: left;
+    margin: 1vw 0;
+}
+
+/* / title slide */
+
+/* no title slide */
+
+.no-title-slide {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+.no-title-slide > div {
+    height: 1050px;
+}
+
+.no-title-slide .content {
+    max-width: 80%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: start;
+    padding: 200px 30px 30px 300px;
+}
+
+.no-title-slide .content p {
+    margin: 0;
+    text-align: left;
+}
+
+/* / no title slide */
+
+.content b {
+    color: var(--sd-primary-color);
+}
+
+/*
+ full size schema
+ */
+.content.center {
+    padding: 0px 30px 30px 300px;
+}
+
+.content.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.name {
+    color: var(--color-bg-highlight);
+    font-family: Outfit;
+    font-size: 1.5em;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+}
+
+.pp {
+    border-radius: 50%;
+    border: solid 6px var(--color-bg-highlight);
+    width: 12vw;
+    align-self: end;
+}
+
+/**
+ * demo slide shows commands, so its flex vertical
+ */
+.reveal .slides > section.demo-slide {
+    flex-direction: column;
+    gap: 3vw;
+    flex-grow: 0;
+    align-items: center;
+}
+
+#demo-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("images/anastasiya-jjX1-W5ePcE-unsplash.jpg");
+    background-size: cover;
+    z-index: 100;
+    /*inset: 50% auto auto 50%;*/
+    /*transform: translate(-50%, -50%);*/
+}
+#demo-slide.hidden {
+    display: none;
+}
+#demo-slide {
+    display: block;
+}
+
+#demo-slide #demo-slide-window {
+    display: block;
+
+    position: absolute;
+    top: 6em;
+    left: 7em;
+
+    width: 90%;
+    height: 85%;
+
+    background-color: black;
+    /*box-shadow: 0 0 0.25rem #555;*/
+    /*border-radius: 0.25rem;*/
+}
+
+#demo-slide .logo {
+    position: absolute;
+    width: 5em;
+    height: 5em;
+    top: 2em;
+    left: 10em;
+}
+
+.reveal code {
+    background-color: #272822;
+}
+
+/* Add spacing between p and pre tags when they are adjacent */
+.reveal pre {
+    margin-top: 40px;
+}
