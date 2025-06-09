@@ -56,13 +56,14 @@
                  data-background-position="left"
                  data-background-opacity="0.3">
             <div>
-                <h1>Une faille de sécurité dans une image de base</h1>
+                <h2>Une faille de sécu dans une image de base (xz utils 💣)</h2>
                 <p class="fragment">Implique de mettre à jour l'image de base et la re-construire</p>
-                <p class="fragment"><code>docker image build</code> && <code>docker image push</code></p>
-                <p class="fragment">Il faut mettre à jour 260 <code>Dockerfile</code></p>
+                <p class="fragment"><code>docker image build</code> && <code>docker image push</code> ✅</p>
+                <p class="fragment">Il faut mettre à jour 260 <code>Dockerfile</code> 😱</p>
                 <p class="fragment">Et relancer 260 pipelines de CI</p>
                 <p class="fragment">Ça va prendre des jours</p>
-                <h2 class="fragment">🔥😈 Bienvenue dans l'enfer OPS 😈🔥</h2>
+                <p class="fragment">260 * 8 minutes : 35 heures de compute 💸</p>
+                <h2 class="fragment">🔥😈 l'enfer OPS 😈🔥</h2>
             </div>
         </section>
         <section class="thanks-slide"
@@ -138,27 +139,50 @@
 
         <section class="no-title-slide">
             <div class="left-band"></div>
-            <div class="content">
+            <div class="content" style="align-items: center;">
                 <h1>Images OCI et Manifests</h1>
+                <p class="fragment" data-fragment-index="1">Un <code>Dockerfile</code> à l'envers</p>
 
-                <div class="container">
-                    <div class="layer application slideUp">
-                        9e8e73ef
-                    </div>
+                <div style="display:flex; gap: 2rem;">
+                    <div class="container">
+                        <div class="layer application slideUp">
+                            9e8e73ef
+                        </div>
 
-                    <div class="layer application slideUp">
-                        3afff29d
-                    </div>
+                        <div class="layer application slideUp">
+                            3afff29d
+                        </div>
 
-                    <div class="layer runtime">
-                        393ad826
-                    </div>
-                    <div class="layer runtime">
-                        5a7813e0
-                    </div>
+                        <div class="layer runtime">
+                            393ad826
+                        </div>
+                        <div class="layer runtime">
+                            5a7813e0
+                        </div>
 
-                    <div class="layer distribution">
-                        81bd62b8
+                        <div class="layer distribution">
+                            81bd62b8
+                        </div>
+                    </div>
+                    <div class="container fragment" data-fragment-index="1" style="width: 40rem;">
+                        <div class="layer application slideUp">
+                            COPY application
+                        </div>
+
+                        <div class="layer application slideUp">
+                            COPY libs
+                        </div>
+
+                        <div class="layer runtime">
+                            FROM eclipse-temurin
+                        </div>
+                        <div class="layer runtime">
+                            5a7813e0
+                        </div>
+
+                        <div class="layer distribution">
+                            FROM ubuntu
+                        </div>
                     </div>
                 </div>
 
@@ -556,20 +580,20 @@ crane rebase IMAGE \
             <div class="content schema-full">
                 <h2>Démo 🕹️</h2>
                 <p>Rebase d'une image Java 23 -> 24</p>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 docker container run --rm -it $REGISTRY/java-app:jdk-23
                     </code>
                 </pre>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane manifest $REGISTRY/java-app:jdk-23 | jq ".layers[].digest"
 crane manifest $REGISTRY/eclipse-temurin:23 | jq ".layers[].digest"
                     </code>
                 </pre>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane rebase $REGISTRY/java-app:jdk-23 \
@@ -578,7 +602,7 @@ crane rebase $REGISTRY/java-app:jdk-23 \
   --tag $REGISTRY/java-app:jdk-24
                     </code>
                 </pre>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane manifest $REGISTRY/java-app:jdk-24 | jq ".layers[].digest"
