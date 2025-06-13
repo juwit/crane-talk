@@ -617,13 +617,13 @@ crane manifest $REGISTRY/eclipse-temurin:24 | jq ".layers[].digest"
             <div class="content schema-full">
                 <h2>Démo 🕹️</h2>
                 <p>Ajout d'un agent OpenTelemetry</p>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 docker container run --rm -it $REGISTRY/java-app:jdk-23
                     </code>
                 </pre>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane rebase $REGISTRY/java-app:jdk-23 \
@@ -632,7 +632,7 @@ crane rebase $REGISTRY/java-app:jdk-23 \
   --tag $REGISTRY/java-app:jdk-24-otel
                     </code>
                 </pre>
-                <pre>
+                <pre class="fragment">
                     <aside class="left" onclick="bashDemo(this)">> bash</aside>
                     <code data-trim data-noescape class="language-bash">
 crane manifest $REGISTRY/java-app:jdk-24-otel | jq ".layers[].digest"
@@ -803,6 +803,34 @@ crane manifest $REGISTRY/java-app:jdk-23 | jq
             </div>
         </section>
 
+        <section class="no-title-slide">
+            <div class="left-band"></div>
+            <div class="content">
+                <h1>autres trucs possibles avec crane</h1>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        # ajouter le contenu d'un tar à une image
+                        crane append
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        # écraser une image en une unique layer
+                        crane flatten
+                    </code>
+                </pre>
+                <pre>
+                    <aside class="left" onclick="bashDemo(this)">> bash</aside>
+                    <code data-trim data-noescape class="language-bash">
+                        # copier une image d'un registry à un autre
+                        crane copy
+                    </code>
+                </pre>
+            </div>
+        </section>
+
         <section class="thanks-slide"
                  data-background-image="./css/images/devlille-teaser25.png"
                  data-background-size="contain"
@@ -810,11 +838,13 @@ crane manifest $REGISTRY/java-app:jdk-23 | jq
                  data-background-opacity="1">
             <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <h1>Merci !</h1>
+                <h4>feedbacks 👇</h4>
                 <img src="assets/qr-code-devlille.png" style="width:30%;"/>
             </div>
             <div>
                 <img src="assets/pp_2025.png" class="pp"/>
                 <span class="name">Julien Wittouck</span>
+                <span style="display: flex; align-items: center;"><img src="assets/website.png" style="width: 3vw;"/>&nbsp;https://codeka.io</span>
                 <span style="display: flex; align-items: center;"><img src="assets/bluesky.png" style="width: 3vw;"/>&nbsp;@codeka.io</span>
                 <span style="display: flex; align-items: center;"><img src="assets/linkedin.png" style="width: 3vw;"/>&nbsp;julien-wittouck</span>
             </div>
